@@ -9,14 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class SongAdapter
-        extends RecyclerView.Adapter<SongViewHolder>
-        implements MediaPlayer.OnCompletionListener {
+public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
 
     private ArrayList<Song> songs;
     private MusicService musicService;
-
-    private int lastPressed = -1;
 
     public SongAdapter(ArrayList<Song> songs) {
         this.songs = songs;
@@ -34,7 +30,7 @@ public class SongAdapter
         songViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicService.playSong(songs.get(songViewHolder.getBindingAdapterPosition()).getSongId());
+                musicService.playSong(songViewHolder.getBindingAdapterPosition());
             }
         });
 
@@ -49,13 +45,5 @@ public class SongAdapter
     @Override
     public int getItemCount() {
         return this.songs.size();
-    }
-
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        if(this.lastPressed != getItemCount()) {
-            this.lastPressed = this.lastPressed + 1;
-            musicService.playSong(this.songs.get(this.lastPressed).getSongId());
-        }
     }
 }

@@ -9,15 +9,18 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class MusicService
         extends Service
-        implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+        implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
 
     private final String TAG = "MusicServiceLog";
 
     private MediaPlayer player;
+    private ArrayList<Song> songs;
 
-    private int currSongId = -1;
+    private int currSongPosition = -1;
 
     @Override
     public void onCreate() {
@@ -30,23 +33,29 @@ public class MusicService
         super.onStartCommand(intent, flags, startId);
         Log.d("Service MusicService","onStartCommand Play");
 
-        this.player = new MediaPlayer();
-        this.player.setOnPreparedListener(this);
-        this.player.setVolume(50,50);
+        initializeMediaPlayer();
 
         return Service.START_STICKY;
     }
 
-    public void playSong(int songId) {
-        if(this.currSongId != songId) {
+    public void setSongs(ArrayList<Song> songs) {
+        this.songs = songs;
+    }
+
+    public void playSong(int position) {
+        if(this.player == null) {
+            initializeMediaPlayer();
+        }
+
+        if(this.currSongPosition != position) {
             if(this.player.isPlaying()) {
                 this.player.stop();
-                this.player.reset();
             }
+            this.player.reset();
 
-            String path = "android.resource://" + getPackageName() + "/" + songId;
+            String path = "android.resource://" + getPackageName() + "/" + this.songs.get(position).getSongId();
 
-            Log.d(TAG, "playSong: " + songId + " " + path);
+            Log.d(TAG, "playSong: " + this.songs.get(position).getTitle() + " " + path);
 
             Uri songPath = Uri.parse(path);
             try {
@@ -57,12 +66,19 @@ public class MusicService
                                 .setUsage(AudioAttributes.USAGE_MEDIA)
                                 .build()
                 );
-                this.currSongId = songId;
+                this.currSongPosition = position;
                 this.player.prepareAsync();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void initializeMediaPlayer() {
+        this.player = new MediaPlayer();
+        this.player.setOnPreparedListener(this);
+        this.player.setOnCompletionListener(this);
+        this.player.setVolume(50,50);
     }
 
     @Override
@@ -91,6 +107,13 @@ public class MusicService
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d(TAG, "onPrepared: ");
         mediaPlayer.start();
+        // for testing purposes
+        //mediaPlayer.seekTo(mediaPlayer.getDuration() - 10000);
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        playNextSong();
     }
 
     @Override
@@ -98,5 +121,12 @@ public class MusicService
         return false;
     }
 
-
+    public void playNextSong() {
+        if(this.currSongPosition != this.songs.size()-1) {
+            playSong(this.currSongPosition + 1);
+        } else {
+           this.player.release();
+           this.player = null;
+        }
+    }
 }

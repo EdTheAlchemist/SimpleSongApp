@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             MusicService.LocalBinder binder = (MusicService.LocalBinder) service;
             musicService = (binder.getService());
             bound = true;
+            musicService.setSongs(songs);
             songAdapter.setMusicService(musicService);
             Log.d(TAG,"ServiceConnection made");
         }
