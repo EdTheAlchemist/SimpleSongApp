@@ -1,6 +1,5 @@
 package com.mobdeve.tighee.simplemusicapp;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
 
@@ -18,10 +19,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
         this.songs = songs;
     }
 
-    public void setMusicService(MusicService musicService) {
-        this.musicService = musicService;
-    }
-
     @Override
     public SongViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
@@ -30,8 +27,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
         songViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicService.playSong(songViewHolder.getBindingAdapterPosition());
-                ((MainActivity) parent.getContext()).setSongData(songs.get(songViewHolder.getBindingAdapterPosition()));
+                // When an item is clicked, inform the MediaPlayer (in MusicService) to play the
+                // song
+                musicService.playSongAtPosition(songViewHolder.getBindingAdapterPosition());
             }
         });
 
@@ -48,15 +46,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
         return this.songs.size();
     }
 
-    public void playSong() {
-        this.musicService.playSong();
-    }
-
-    public void pauseSong() {
-        this.musicService.pauseSong();
-    }
-
-    public void getProgress() {
-
+    public void setMusicService(MusicService musicService) {
+        this.musicService = musicService;
     }
 }

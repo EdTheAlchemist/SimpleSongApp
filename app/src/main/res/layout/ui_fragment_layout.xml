@@ -4,14 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#90CAF9"
-    android:padding="4dp">
+    android:background="#1976D2"
+    android:padding="8dp">
+
+    <ImageButton
+        android:id="@+id/fragPlayIbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/fragAlbumArtIv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragAlbumArtIv"
+        app:srcCompat="@android:drawable/ic_media_play" />
 
     <ImageView
         android:id="@+id/fragAlbumArtIv"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginBottom="4dp"
+        android:background="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/fragProgressSb"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,21 +40,12 @@
         android:id="@+id/fragDisplayTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:text="TextView"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Please select a song and enjoy :)"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/fragAlbumArtIv"
         app:layout_constraintEnd_toStartOf="@+id/fragPlayIbtn"
         app:layout_constraintStart_toEndOf="@+id/fragAlbumArtIv"
         app:layout_constraintTop_toTopOf="@+id/fragAlbumArtIv" />
-
-    <ImageButton
-        android:id="@+id/fragPlayIbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/fragAlbumArtIv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fragAlbumArtIv"
-        app:srcCompat="@android:drawable/ic_media_play" />
 </androidx.constraintlayout.widget.ConstraintLayout>
