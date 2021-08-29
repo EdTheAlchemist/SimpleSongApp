@@ -1,8 +1,12 @@
-package com.mobdeve.tighee.simplesongapp;
+package com.mobdeve.tighee.simplemusicapp;
 
 import java.util.ArrayList;
 
-public class DataGenerator {
+public class HelperClass {
+    public static final String
+        PLAY_ACTION = "com.mobdeve.tighee.simplemusicapp.play_action",
+        STOP_ACTION = "com.mobdeve.tighee.simplemusicapp.stop_action";
+
     public static ArrayList<Song> generateData() {
         ArrayList<Song> data = new ArrayList<>();
 

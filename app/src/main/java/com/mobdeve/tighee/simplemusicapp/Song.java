@@ -1,4 +1,4 @@
-package com.mobdeve.tighee.simplesongapp;
+package com.mobdeve.tighee.simplemusicapp;
 
 public class Song {
     private String artist, title, album;

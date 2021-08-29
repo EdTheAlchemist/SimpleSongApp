@@ -1,6 +1,6 @@
-package com.mobdeve.tighee.simplesongapp;
+package com.mobdeve.tighee.simplemusicapp;
 
-import android.media.MediaPlayer;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +31,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
             @Override
             public void onClick(View view) {
                 musicService.playSong(songViewHolder.getBindingAdapterPosition());
+                ((MainActivity) parent.getContext()).setSongData(songs.get(songViewHolder.getBindingAdapterPosition()));
             }
         });
 
@@ -45,5 +46,17 @@ public class SongAdapter extends RecyclerView.Adapter<SongViewHolder> {
     @Override
     public int getItemCount() {
         return this.songs.size();
+    }
+
+    public void playSong() {
+        this.musicService.playSong();
+    }
+
+    public void pauseSong() {
+        this.musicService.pauseSong();
+    }
+
+    public void getProgress() {
+
     }
 }

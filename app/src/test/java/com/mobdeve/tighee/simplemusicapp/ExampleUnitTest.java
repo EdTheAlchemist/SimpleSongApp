@@ -1,4 +1,4 @@
-package com.mobdeve.tighee.simplesongapp;
+package com.mobdeve.tighee.simplemusicapp;
 
 import org.junit.Test;
 
