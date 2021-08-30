@@ -124,6 +124,15 @@ public class MediaPlayerFragment extends Fragment {
         super.onStop();
         // Unregisters the BroadcastReceiver
         getActivity().unregisterReceiver(this.myBroadcastReceiver);
+
+        // When the fragment is about to stop, we trigger logic simulating a pause because our
+        // MediaPlayer won't play outside of the app. This allows the app to be ready when it comes
+        // back -- assuming components were not destroyed.
+        if(isPlaying) {
+            fragPlayIbtn.setImageResource(android.R.drawable.ic_media_play);
+            isPlaying = false;
+            ((MainActivity) getActivity()).playSong(isPlaying);
+        }
     }
 
     /*
@@ -139,7 +148,7 @@ public class MediaPlayerFragment extends Fragment {
         // MediaPlayer. We offload from the Main Thread because we don't want the UI thread querying
         // the MediaPlayer (in the MusicService) every second. We then use a handler associated to
         // the Main Thread to push any UI updates
-        private ScheduledExecutorService executorService;
+        private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         private Handler handler = new Handler(Looper.getMainLooper());
 
         @Override

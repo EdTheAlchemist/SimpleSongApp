@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Saves a copy of the intent (for when we want to start or cancel the service again)
         this.musicIntent = new Intent(this, MusicService.class);
+        startService(musicIntent);
+        Log.d(TAG, "onCreate called and MusicService started.");
     }
 
     @Override
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         // would be useful if this were to be modified to handle playing songs outside of the app.
         if(!bound) {
             bindService(musicIntent, mConnection, BIND_AUTO_CREATE);
-            startService(musicIntent);
+            Log.d(TAG, "onStart: service bound");
         }
     }
 
@@ -73,8 +75,22 @@ public class MainActivity extends AppCompatActivity {
         // See comment in onStart for the general sentiment.
         if(bound) {
             unbindService(mConnection);
-            stopService(musicIntent);
+
+            // Unbinding actually doesn't call onDisconnect() in the ServiceConnection; hence, why
+            // we still perform a clean up here.
+            bound = false;
+            musicService = null;
+            songAdapter.setMusicService(null);
+
+            Log.d(TAG, "onStart: service unbound");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(musicIntent);
+        Log.d(TAG, "onDestroy called and MusicService stopped.");
     }
 
     // Logic for when MusicService is bound to the activity.
@@ -101,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             // app's set up; however, I felt like doing so in case any generalization / improvements
             // will be made.
             bound = false;
+            musicService = null;
             songAdapter.setMusicService(null);
         }
     };

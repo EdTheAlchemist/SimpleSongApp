@@ -144,6 +144,7 @@ public class MusicService extends Service {
             // If the song selected is the same as what is loaded, we simply play because the
             // MediaPlayer is assumed to still be prepared and readying for playing.
             this.player.start();
+            sendSongBroadcast(HelperClass.PLAY_ACTION);
         }
     }
 
@@ -185,6 +186,12 @@ public class MusicService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        sendSongBroadcast(HelperClass.PAUSE_ACTION);
+        return super.onUnbind(intent);
     }
 
     public class LocalBinder extends Binder {
